@@ -110,6 +110,12 @@
     // "skipDefaultLibCheck": true,                      /* Skip type checking .d.ts files that are included with TypeScript. */
     "skipLibCheck": true /* Skip type checking all .d.ts files. */,
     "experimentalDecorators": true,
-    "emitDecoratorMetadata": true
+    "emitDecoratorMetadata": true,
+    "baseUrl": ".",
+    "paths": {
+      "@aplication/*": ["src/application/*"],
+      "@kernel/*": ["src/kernel/*"],
+      "@main/*": ["src/main/*"]
+    }
   }
 }
