@@ -1,8 +1,7 @@
 import { z } from "zod";
+import { getSchema } from "../../kernel/decorators/Schema";
 
 export abstract class Controller<TBody = undefined> {
-  protected schema?: z.ZodSchema;
-
   protected abstract handle(
     request: Controller.Request
   ): Promise<Controller.Response<TBody>>;
@@ -19,11 +18,12 @@ export abstract class Controller<TBody = undefined> {
   }
 
   private validateBody(body: Controller.Request["body"]) {
-    if (!this.schema) {
+    const schema = getSchema(this);
+    if (!schema) {
       return body;
     }
 
-    return this.schema.parse(body);
+    return schema.parse(body);
   }
 }
 
