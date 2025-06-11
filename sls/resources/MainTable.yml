@@ -4,7 +4,7 @@ Resources:
     Properties:
       BillingMode: PAY_PER_REQUEST
       TableName: ${self:service}-${self:provider.stage}-MainTable
-      DeletionProtectionEnabled: true
+      DeletionProtectionEnabled: false
       PointInTimeRecoverySpecification:
         PointInTimeRecoveryEnabled: true
         RecoveryPeriodInDays: 35
@@ -13,9 +13,9 @@ Resources:
           AttributeType: S
         - AttributeName: SK
           AttributeType: S
-        - AttributeName: GS1PK
+        - AttributeName: GSI1PK
           AttributeType: S
-        - AttributeName: GS1SK
+        - AttributeName: GSI1SK
           AttributeType: S
       KeySchema:
         - AttributeName: PK
@@ -23,11 +23,11 @@ Resources:
         - AttributeName: SK
           KeyType: RANGE
       GlobalSecondaryIndexes:
-        - IndexName: GS1
+        - IndexName: GSI1
           KeySchema:
-            - AttributeName: GS1PK
+            - AttributeName: GSI1PK
               KeyType: HASH
-            - AttributeName: GS1SK
+            - AttributeName: GSI1SK
               KeyType: RANGE
           Projection:
             ProjectionType: ALL

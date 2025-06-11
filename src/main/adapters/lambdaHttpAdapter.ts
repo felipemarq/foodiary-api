@@ -1,4 +1,5 @@
 import { Controller } from "@aplication/contracts/Controller";
+import { ApplicationError } from "@aplication/errors/application/ApplicationError";
 import { ErrorCode } from "@aplication/errors/ErrorCode";
 import { HttpError } from "@aplication/errors/http/HttpError";
 import { lambdaBodyParser } from "@main/utils/lambdaBodyParser";
@@ -7,9 +8,7 @@ import { APIGatewayProxyEventV2, APIGatewayProxyResultV2 } from "aws-lambda";
 import { ZodError } from "zod";
 
 export function lambdaHttpAdapter(controller: Controller<unknown>) {
-  return async (
-    event: APIGatewayProxyEventV2
-  ): Promise<APIGatewayProxyResultV2> => {
+  return async (event: APIGatewayProxyEventV2): Promise<APIGatewayProxyResultV2> => {
     try {
       const body = lambdaBodyParser(event.body);
       const params = event.pathParameters ?? {};
@@ -42,6 +41,14 @@ export function lambdaHttpAdapter(controller: Controller<unknown>) {
 
       if (error instanceof HttpError) {
         return lambdaErrorResponse(error);
+      }
+
+      if (error instanceof ApplicationError) {
+        return lambdaErrorResponse({
+          statusCode: error.statusCode ?? 400,
+          code: error.code,
+          message: error.message,
+        });
       }
 
       console.log(error);

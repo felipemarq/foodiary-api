@@ -24,6 +24,15 @@ export class AccountItem {
     return new AccountItem({ ...account, createdAt: account.createdAt.toISOString() });
   }
 
+  static toEntity(accountIntem: AccountItem.ItemType) {
+    return new Account({
+      id: accountIntem.id,
+      email: accountIntem.email,
+      externalId: accountIntem.externalId,
+      createdAt: new Date(accountIntem.createdAt),
+    });
+  }
+
   static getPK(accountId: string): AccountItem.Keys["PK"] {
     return `ACCOUNT#${accountId}`;
   }
