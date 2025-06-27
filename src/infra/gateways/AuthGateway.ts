@@ -12,11 +12,16 @@ import { createHmac } from "crypto";
 @Injectable()
 export class AuthGateway {
   constructor(private readonly appConfig: AppConfig) {}
-  async signUp({ email, password }: AuthGateway.SignUpParams): Promise<AuthGateway.SignUpResult> {
+  async signUp({
+    email,
+    password,
+    internalId,
+  }: AuthGateway.SignUpParams): Promise<AuthGateway.SignUpResult> {
     const command = new SignUpCommand({
       ClientId: this.appConfig.auth.cognito.client.id,
       Username: email,
       Password: password,
+      UserAttributes: [{ Name: "custom:internalId", Value: internalId }],
       SecretHash: this.getSecretHash(email),
     });
 
@@ -61,7 +66,7 @@ export class AuthGateway {
 }
 
 export namespace AuthGateway {
-  export type SignUpParams = { email: string; password: string };
+  export type SignUpParams = { email: string; password: string; internalId: string };
   export type SignUpResult = { externalId: string };
 
   export type SignInParams = { email: string; password: string };

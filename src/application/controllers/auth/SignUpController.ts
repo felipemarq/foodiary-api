@@ -9,14 +9,16 @@ import { request } from "http";
 
 @Injectable()
 @Schema(signUpSchema)
-export class SignUpController extends Controller<SignUpController.Response> {
+export class SignUpController extends Controller<"public", SignUpController.Response> {
   constructor(private readonly signUpUseCase: SignUpUseCase) {
     super();
   }
 
   protected override async handle({
     body,
-  }: Controller.Request<SignUpBody>): Promise<Controller.Response<SignUpController.Response>> {
+  }: Controller.Request<"public", SignUpBody>): Promise<
+    Controller.Response<SignUpController.Response>
+  > {
     const { account } = body;
     const { accessToken, refreshToken } = await this.signUpUseCase.execute(account);
     return {

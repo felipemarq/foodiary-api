@@ -10,24 +10,22 @@ export class SignUpUseCase {
     private readonly authGateway: AuthGateway,
     private readonly accountRepository: AccountRepository
   ) {}
-  async execute({
-    email,
-    password,
-  }: SignUpUseCase.Input): Promise<SignUpUseCase.Output> {
-    const emailAlreadyExists =
-      await this.accountRepository.findByEmail(email);
+  async execute({ email, password }: SignUpUseCase.Input): Promise<SignUpUseCase.Output> {
+    const emailAlreadyExists = await this.accountRepository.findByEmail(email);
     if (emailAlreadyExists) {
       throw new EmailAlreadyInUse();
     }
+    const account = new Account({ email });
     const { externalId } = await this.authGateway.signUp({
       email,
       password,
+      internalId: account.id,
     });
 
-    const account = new Account({ email, externalId });
+    account.externalId = externalId;
+
     await this.accountRepository.create(account);
-    const { accessToken, refreshToken } =
-      await this.authGateway.signIn({ email, password });
+    const { accessToken, refreshToken } = await this.authGateway.signIn({ email, password });
     return {
       accessToken,
       refreshToken,
