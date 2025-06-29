@@ -1,30 +1,25 @@
 import { Account } from "@aplication/entities/Account";
 import { EmailAlreadyInUse } from "@aplication/errors/application/EmailAlreadyInUse";
-import { InvalidCredentials } from "@aplication/errors/application/InvalidCredentials";
 import { AccountRepository } from "@infra/database/dynamo/repositories/AccountRepository";
 import { AuthGateway } from "@infra/gateways/AuthGateway";
 import { Injectable } from "@kernel/decorators/Injectable";
 
 @Injectable()
-export class SignInUseCase {
+export class RefreshTokenUseCase {
   constructor(private readonly authGateway: AuthGateway) {}
-  async execute({ email, password }: SignInUseCase.Input): Promise<SignInUseCase.Output> {
-    try {
-      const { accessToken, refreshToken } = await this.authGateway.signIn({ email, password });
-      return {
-        accessToken,
-        refreshToken,
-      };
-    } catch (error) {
-      throw new InvalidCredentials();
-    }
+  async execute({ refreshToken }: RefreshTokenUseCase.Input): Promise<RefreshTokenUseCase.Output> {
+    const { accessToken: newAccessToken, refreshToken: newRefreshToken } =
+      await this.authGateway.refreshToken({ refreshToken });
+    return {
+      accessToken: newAccessToken,
+      refreshToken: newRefreshToken,
+    };
   }
 }
 
-export namespace SignInUseCase {
+export namespace RefreshTokenUseCase {
   export type Input = {
-    email: string;
-    password: string;
+    refreshToken: string;
   };
   export type Output = {
     accessToken: string;
