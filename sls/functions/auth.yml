@@ -12,6 +12,13 @@ signIn:
         path: /auth/sign-in
         method: POST
 
+forgotPassword:
+  handler: src/main/functions/auth/forgotPassword.handler
+  events:
+    - httpApi:
+        path: /auth/forgot-password
+        method: POST
+
 refreshToken:
   handler: src/main/functions/auth/refreshToken.handler
   events:

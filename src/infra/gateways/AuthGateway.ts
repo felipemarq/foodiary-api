@@ -2,6 +2,8 @@ import { InvalidRefreshToken } from "@aplication/errors/application/InvalidRefre
 import {
   CognitoIdentityProvider,
   CognitoIdentityProviderClient,
+  ConfirmForgotPasswordCommand,
+  ForgotPasswordCommand,
   GetTokensFromRefreshTokenCommand,
   InitiateAuthCommand,
   RefreshTokenReuseException,
@@ -89,6 +91,32 @@ export class AuthGateway {
     }
   }
 
+  async forgotPassword({ email }: AuthGateway.ForgotPasswordParams): Promise<void> {
+    const command = new ForgotPasswordCommand({
+      ClientId: this.appConfig.auth.cognito.client.id,
+      Username: email,
+      SecretHash: this.getSecretHash(email),
+    });
+
+    await cognitoClient.send(command);
+  }
+
+  async confirmForgotPassword({
+    email,
+    confirmationCode,
+    password,
+  }: AuthGateway.ConfirmForgotPasswordParams): Promise<void> {
+    const command = new ConfirmForgotPasswordCommand({
+      ClientId: this.appConfig.auth.cognito.client.id,
+      ConfirmationCode: confirmationCode,
+      Password: password,
+      Username: email,
+      SecretHash: this.getSecretHash(email),
+    });
+
+    await cognitoClient.send(command);
+  }
+
   private getSecretHash(email: string) {
     const { id, secret } = this.appConfig.auth.cognito.client;
     const secretHash = createHmac("SHA256", secret).update(`${email}${id}`).digest("base64");
@@ -106,4 +134,12 @@ export namespace AuthGateway {
 
   export type RefreshTokenParams = { refreshToken: string };
   export type RefreshTokenResult = { accessToken: string; refreshToken: string };
+
+  export type ForgotPasswordParams = { email: string };
+
+  export type ConfirmForgotPasswordParams = {
+    email: string;
+    confirmationCode: string;
+    password: string;
+  };
 }
