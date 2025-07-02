@@ -19,6 +19,13 @@ forgotPassword:
         path: /auth/forgot-password
         method: POST
 
+confirmForgotPassword:
+  handler: src/main/functions/auth/confirmForgotPassword.handler
+  events:
+    - httpApi:
+        path: /auth/forgot-password/confirm
+        method: POST
+
 refreshToken:
   handler: src/main/functions/auth/refreshToken.handler
   events:

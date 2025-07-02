@@ -3,7 +3,7 @@ import { Controller } from "@aplication/contracts/Controller";
 import { Schema } from "@kernel/decorators/Schema";
 
 import { Injectable } from "@kernel/decorators/Injectable";
-import { SignInUseCase } from "@aplication/useCases/SignInUseCase";
+import { SignInUseCase } from "@aplication/useCases/auth/SignInUseCase";
 import { SignInBody, signInSchema } from "./schemas/signInSchema";
 
 @Injectable()

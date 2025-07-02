@@ -9,6 +9,6 @@ export class InvalidCredentials extends ApplicationError {
     super();
     this.name = "Invalid Credentials";
     this.message = "Invalid Credentials";
-    this.code = ErrorCode.INVALID_REFRESH_TOKEN;
+    this.code = ErrorCode.INVALID_CREDENTIALS;
   }
 }

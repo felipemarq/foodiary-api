@@ -3,10 +3,10 @@ import { Controller } from "@aplication/contracts/Controller";
 import { Schema } from "@kernel/decorators/Schema";
 
 import { Injectable } from "@kernel/decorators/Injectable";
-import { SignInUseCase } from "@aplication/useCases/SignInUseCase";
+import { SignInUseCase } from "@aplication/useCases/auth/SignInUseCase";
 
 import { RefreshTokenBody, refreshTokenSchema } from "./schemas/refreshTokenSchema";
-import { RefreshTokenUseCase } from "@aplication/useCases/RefreshTokenUseCase";
+import { RefreshTokenUseCase } from "@aplication/useCases/auth/RefreshTokenUseCase";
 
 @Injectable()
 @Schema(refreshTokenSchema)

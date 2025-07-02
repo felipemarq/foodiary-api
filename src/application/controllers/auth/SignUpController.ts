@@ -2,7 +2,7 @@ import { Controller } from "@aplication/contracts/Controller";
 
 import { Schema } from "@kernel/decorators/Schema";
 
-import { SignUpUseCase } from "@aplication/useCases/SignUpUseCase";
+import { SignUpUseCase } from "@aplication/useCases/auth/SignUpUseCase";
 import { Injectable } from "@kernel/decorators/Injectable";
 import { SignUpBody, signUpSchema } from "./schemas/signUpSchema";
 import { request } from "http";
