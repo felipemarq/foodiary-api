@@ -34,7 +34,7 @@ refreshToken:
         method: POST
 
 preSignUpTrigger:
-  handler: src/main/functions/auth/preSignUpTrigger.handler
+  handler: src/main/functions/auth/cognito/preSignUpTrigger.handler
   events:
     - cognitoUserPool:
         pool: ${self:custom.cognito.PoolName}
@@ -44,4 +44,13 @@ preSignUpTrigger:
 
 # Trigger configurado manualmente para event V2
 preTokenGenerationTrigger:
-  handler: src/main/functions/auth/preTokenGenerationTrigger.handler
+  handler: src/main/functions/auth/cognito/preTokenGenerationTrigger.handler
+
+customMessageTrigger:
+  handler: src/main/functions/auth/cognito/customMessageTrigger.handler
+  events:
+    - cognitoUserPool:
+        pool: ${self:custom.cognito.PoolName}
+        trigger: CustomMessage
+        existing: true
+        forceDeploy: true

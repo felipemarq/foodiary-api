@@ -108,6 +108,7 @@
 
     /* Completeness */
     // "skipDefaultLibCheck": true,                      /* Skip type checking .d.ts files that are included with TypeScript. */
+    "jsx": "react",
     "skipLibCheck": true /* Skip type checking all .d.ts files. */,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
