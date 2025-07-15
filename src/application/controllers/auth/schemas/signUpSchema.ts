@@ -1,9 +1,23 @@
-import { z } from "zod";
+import { Profile } from "@aplication/entities/Profile";
+import z from "zod";
 
 export const signUpSchema = z.object({
   account: z.object({
-    password: z.string({ message: "Password should be a string" }).min(8, "Password is too short"),
-    email: z.string().min(5, "Email is too short").email("Invalid email"),
+    email: z.string().min(1, '"email" is required').email("Invalid email"),
+    password: z.string().min(8, '"password" should be at least 8 characters long'),
+  }),
+  profile: z.object({
+    name: z.string().min(1, '"name" is required'),
+    birthDate: z
+      .string()
+      .min(1, '"birthDate" is required')
+      .date('"birthDate" should be a valid date (YYYY-MM-DD)')
+      .transform((date) => new Date(date)),
+    gender: z.nativeEnum(Profile.Gender),
+    goal: z.nativeEnum(Profile.Goal),
+    height: z.number(),
+    weight: z.number(),
+    activityLevel: z.nativeEnum(Profile.ActivityLevel),
   }),
 });
 

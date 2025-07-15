@@ -1,11 +1,8 @@
-import { Controller } from "@aplication/contracts/Controller";
-
-import { Schema } from "@kernel/decorators/Schema";
-
-import { SignUpUseCase } from "@aplication/useCases/auth/SignUpUseCase";
 import { Injectable } from "@kernel/decorators/Injectable";
+import { Schema } from "@kernel/decorators/Schema";
 import { SignUpBody, signUpSchema } from "./schemas/signUpSchema";
-import { request } from "http";
+import { Controller } from "@aplication/contracts/Controller";
+import { SignUpUseCase } from "@aplication/useCases/auth/SignUpUseCase";
 
 @Injectable()
 @Schema(signUpSchema)
@@ -14,18 +11,19 @@ export class SignUpController extends Controller<"public", SignUpController.Resp
     super();
   }
 
-  protected override async handle({
-    body,
-  }: Controller.Request<"public", SignUpBody>): Promise<
-    Controller.Response<SignUpController.Response>
-  > {
-    const { account } = body;
-    const { accessToken, refreshToken } = await this.signUpUseCase.execute(account);
+  protected override async handle({ body }: Controller.Request<"public", SignUpBody>): Promise<Controller.Response<SignUpController.Response>> {
+    const { account, profile } = body;
+
+    const { accessToken, refreshToken } = await this.signUpUseCase.execute({
+      account,
+      profile,
+    });
+
     return {
       statusCode: 201,
       body: {
-        accessToken: accessToken,
-        refreshToken: refreshToken,
+        accessToken,
+        refreshToken,
       },
     };
   }
